@@ -10,11 +10,17 @@ body {
     font-size: 18px;
     line-height: 1.6;
     color: #333;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, skyblue 0%, skyblue 100%);
     min-height: 100vh;
 }
 
 .container {
+    .logo{
+        text-align:left;
+    }
+    .tagline{
+        text-align:left;
+    }
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
