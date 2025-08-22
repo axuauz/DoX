@@ -1,0 +1,41 @@
+
+<div class="container">
+    <div class="result-header">
+        <h2>진단 결과</h2>
+        <div class="patient-info">
+            <p><strong>연령:</strong> <%= age %></p>
+            <p><strong>성별:</strong> <%= gender %></p>
+            <p><strong>증상:</strong> <%= symptoms %></p>
+        </div>
+    </div>
+    
+    <div class="diagnosis-card">
+        <div class="diagnosis-title">
+            <h3>🩺 예상 진단</h3>
+            <p class="diagnosis-name"><%= diagnosis.diagnosis %></p>
+        </div>
+        
+        <div class="medication-section">
+            <h4>💊 권장 의약품</h4>
+            <ul class="medication-list">
+                <% diagnosis.medication.forEach(med => { %>
+                    <li><%= med %></li>
+                <% }); %>
+            </ul>
+        </div>
+        
+        <div class="advice-section">
+            <h4>📝 생활 관리 조언</h4>
+            <p class="advice-text"><%= diagnosis.advice %></p>
+        </div>
+        
+        <div class="warning-section">
+            <p><strong>⚠️ 중요:</strong> 이 결과는 참고용이며, 정확한 진단과 처방을 위해 의사와 상담하시기 바랍니다.</p>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="/" class="btn-secondary">다시 진단하기</a>
+            <button onclick="window.print()" class="btn-primary">결과 출력하기</button>
+        </div>
+    </div>
+</div>
