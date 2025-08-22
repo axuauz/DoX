@@ -1,17 +1,23 @@
 
 const express = require('express');
-const bodyParser = require('body-parser');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 const path = require('path');
 const app = express();
 
-// 미들웨어 설정
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.static('public'));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+// Next.js 개발 서버 프록시 설정
+const nextProxy = createProxyMiddleware({
+  target: 'http://localhost:3000',
+  changeOrigin: true,
+  ws: true,
+});
 
-// 증상 데이터베이스 (실제로는 AI 모델이나 전문 의료 데이터베이스 연동 필요)
+// Next.js 앱으로 프록시
+app.use('/', nextProxy);
+
+// 진단 API 엔드포인트
+app.use(express.json());
+
+// 증상 데이터베이스
 const symptomDatabase = {
   '두통': {
     diagnosis: '긴장성 두통',
@@ -40,16 +46,10 @@ const symptomDatabase = {
   }
 };
 
-// 메인 페이지
-app.get('/', (req, res) => {
-  res.render('index');
-});
-
-// 진단 결과 페이지
-app.post('/diagnose', (req, res) => {
+// API 라우트
+app.post('/api/diagnose', (req, res) => {
   const { symptoms, age, gender } = req.body;
   
-  // 간단한 진단 로직 (실제로는 더 복잡한 AI 알고리즘 필요)
   let diagnosis = null;
   let matchedSymptom = null;
   
@@ -70,18 +70,13 @@ app.post('/diagnose', (req, res) => {
     matchedSymptom = '기타 증상';
   }
   
-  res.render('result', {
+  res.json({
     symptoms,
     age,
     gender,
     matchedSymptom,
     diagnosis
   });
-});
-
-// 응급상황 페이지
-app.get('/emergency', (req, res) => {
-  res.render('emergency');
 });
 
 const PORT = process.env.PORT || 5000;

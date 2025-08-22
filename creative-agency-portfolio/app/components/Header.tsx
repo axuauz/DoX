@@ -1,72 +1,49 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { useTheme } from "next-themes"
 import { motion } from "framer-motion"
-import { MoonIcon, SunIcon } from "@heroicons/react/24/outline"
+import Link from "next/link"
+import { Heart, Phone } from "lucide-react"
 
 export default function Header() {
-  const [mounted, setMounted] = useState(false)
-  const { theme, setTheme } = useTheme()
-
-  useEffect(() => setMounted(true), [])
-
   return (
     <motion.header
-      className="sticky top-0 z-50 bg-background/80 backdrop-blur-md"
+      className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
-        <div className="flex lg:flex-1">
-          <Link href="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">Flowers & Saints</span>
-            <img
-              className="h-8 w-auto"
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/creative-SW6QDQbcVuwPgb6a2CYtYmRbsJa4k1.png"
-              alt="Flowers & Saints Logo"
-            />
-          </Link>
-        </div>
-        <div className="flex gap-x-12">
-          <Link
-            href="https://www.flowersandsaints.com.au"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm font-semibold leading-6 text-foreground hover:text-primary transition-colors"
+      <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="flex items-center space-x-2">
+          <motion.div
+            className="flex items-center space-x-2"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            Work
+            <Heart className="h-8 w-8 text-blue-600" />
+            <span className="text-2xl font-bold text-blue-600">DoX</span>
+          </motion.div>
+        </Link>
+
+        <nav className="hidden md:flex items-center space-x-6">
+          <Link href="/" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+            홈
           </Link>
-          <Link
-            href="https://www.flowersandsaints.com.au"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm font-semibold leading-6 text-foreground hover:text-primary transition-colors"
-          >
-            About
+          <Link href="/about" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+            소개
           </Link>
-          <Link
-            href="https://www.flowersandsaints.com.au"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm font-semibold leading-6 text-foreground hover:text-primary transition-colors"
-          >
-            Contact
+          <Link href="/emergency" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+            응급상황
           </Link>
-        </div>
-        <div className="flex flex-1 justify-end">
-          {mounted && (
-            <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="rounded-full p-2 bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
-            >
-              {theme === "dark" ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
-            </button>
-          )}
-        </div>
-      </nav>
+        </nav>
+
+        <motion.div
+          className="flex items-center space-x-2 text-sm text-gray-600"
+          whileHover={{ scale: 1.05 }}
+        >
+          <Phone className="h-4 w-4" />
+          <span>119</span>
+        </motion.div>
+      </div>
     </motion.header>
   )
 }

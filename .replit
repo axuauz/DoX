@@ -18,6 +18,15 @@ mode = "sequential"
 task = "shell.exec"
 args = "node index.js"
 
+[[workflows.workflow]]
+name = "Start Next.js"
+author = 7347365
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd creative-agency-portfolio && npm run dev"
+
 [[ports]]
 localPort = 5000
 externalPort = 80

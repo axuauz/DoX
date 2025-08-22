@@ -1,70 +1,58 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { Heart, Shield, Clock } from "lucide-react"
 
 export default function Hero() {
   return (
-    <div className="relative isolate overflow-hidden bg-background">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:flex lg:items-center lg:gap-x-10 lg:px-8">
-        <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-lg lg:flex-shrink-0">
-          <motion.h1
-            className="mt-10 text-4xl font-bold tracking-tight text-foreground sm:text-6xl"
+    <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 py-20 sm:py-32">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl text-center">
+          <motion.div
+            className="mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <span className="text-gradient">Flowers & Saints</span>
-          </motion.h1>
-          <motion.p
-            className="mt-6 text-lg leading-8 text-muted-foreground"
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+              <span className="text-blue-600">건강한 노후</span>를 위한
+              <br />
+              스마트 진단 서비스
+            </h1>
+            <p className="mt-6 text-lg leading-8 text-gray-600">
+              간단한 질문으로 맞춤형 건강 조언을 받아보세요.
+              <br />
+              언제나 여러분의 건강을 생각합니다.
+            </p>
+          </motion.div>
+
+          <motion.div
+            className="mt-10 flex justify-center gap-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Where minimal design meets floral artistry. We craft elegant experiences that inspire and elevate your
-            space.
-          </motion.p>
-          <motion.div
-            className="mt-10 flex items-center gap-x-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <a
-              href="https://www.flowersandsaints.com.au"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="apple-button"
-            >
-              Explore Our Work
-            </a>
-            <a
-              href="https://www.flowersandsaints.com.au"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-semibold leading-6 text-foreground"
-            >
-              Learn more <span aria-hidden="true">→</span>
-            </a>
+            <div className="flex flex-col items-center space-y-2">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-white">
+                <Heart className="h-6 w-6" />
+              </div>
+              <span className="text-sm font-medium text-gray-700">맞춤 진단</span>
+            </div>
+            <div className="flex flex-col items-center space-y-2">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-600 text-white">
+                <Shield className="h-6 w-6" />
+              </div>
+              <span className="text-sm font-medium text-gray-700">안전한 서비스</span>
+            </div>
+            <div className="flex flex-col items-center space-y-2">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-600 text-white">
+                <Clock className="h-6 w-6" />
+              </div>
+              <span className="text-sm font-medium text-gray-700">24시간 이용</span>
+            </div>
           </motion.div>
         </div>
-        <motion.div
-          className="mx-auto mt-16 lg:mt-0"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-        >
-          <div className="relative">
-            <img
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/creative-SW6QDQbcVuwPgb6a2CYtYmRbsJa4k1.png"
-              alt="Flowers & Saints design concept"
-              width={600}
-              height={600}
-              className="w-[500px] rounded-2xl shadow-xl ring-1 ring-gray-900/10"
-            />
-          </div>
-        </motion.div>
       </div>
-    </div>
+    </section>
   )
 }

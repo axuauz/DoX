@@ -1,3 +1,4 @@
+
 import "./globals.css"
 import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -8,9 +9,9 @@ import type React from "react"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Minimal Creative Agency",
-  description: "Apple-inspired design portfolio",
-    generator: 'v0.app'
+  title: "DoX - 노인 건강 진단",
+  description: "건강한 노후를 위한 스마트 진단 서비스",
+  generator: 'DoX v1.0'
 }
 
 export default function RootLayout({
@@ -19,9 +20,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} min-h-screen bg-background text-foreground`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <html lang="ko" suppressHydrationWarning>
+      <body className={`${inter.className} min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 text-foreground`}>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <Header />
           <main>{children}</main>
           <Footer />
