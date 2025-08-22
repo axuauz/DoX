@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DoX - 노인 건강 진단</title>
+    <meta name="description" content="건강한 노후를 위한 스마트 진단 서비스">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">DoX</h1>
+            <nav class="nav">
+                <a href="#home">홈</a>
+                <a href="#diagnosis">진단</a>
+                <a href="#about">소개</a>
+                <a href="#emergency">응급상황</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h2 class="hero-title">건강한 노후를 위한<br>스마트 진단 서비스</h2>
+                    <p class="hero-subtitle">AI 기반 자동 진단으로 맞춤형 건강 조언을 받아보세요</p>
+                    <button class="cta-button" onclick="scrollToSection('diagnosis')">진단 시작하기</button>
+                </div>
+                <div class="hero-image">
+                    <div class="health-icon">🏥</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Diagnosis Form Section -->
+        <section id="diagnosis" class="diagnosis-section">
+            <div class="container">
+                <h2 class="section-title">건강 진단</h2>
+                <div class="diagnosis-form">
+                    <form id="diagnosisForm">
+                        <div class="form-group">
+                            <label for="symptoms">증상을 입력해주세요</label>
+                            <textarea id="symptoms" name="symptoms" placeholder="예: 두통이 있어요" required></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="age">연령대</label>
+                                <select id="age" name="age" required>
+                                    <option value="">선택하세요</option>
+                                    <option value="60-65">60-65세</option>
+                                    <option value="66-70">66-70세</option>
+                                    <option value="71-75">71-75세</option>
+                                    <option value="76-80">76-80세</option>
+                                    <option value="81+">81세 이상</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="gender">성별</label>
+                                <select id="gender" name="gender" required>
+                                    <option value="">선택하세요</option>
+                                    <option value="남성">남성</option>
+                                    <option value="여성">여성</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="submit-button">진단 받기</button>
+                    </form>
+                    
+                    <div id="diagnosisResult" class="diagnosis-result" style="display: none;">
+                        <div class="result-content">
+                            <h3>진단 결과</h3>
+                            <div id="resultDetails"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about-section">
+            <div class="container">
+                <h2 class="section-title">DoX 소개</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3>AI 자동 진단</h3>
+                        <p>증상 기반 건강 상태 분석</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💊</div>
+                        <h3>맞춤형 약물 추천</h3>
+                        <p>개인별 맞춤 의약품 안내</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🚨</div>
+                        <h3>응급상황 대응</h3>
+                        <p>응급시 즉시 연락 가능한 번호 제공</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">👥</div>
+                        <h3>노인 친화적 UI</h3>
+                        <p>큰 글씨와 간단한 인터페이스</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Emergency Section -->
+        <section id="emergency" class="emergency-section">
+            <div class="container">
+                <h2 class="section-title">응급상황</h2>
+                <div class="emergency-content">
+                    <div class="emergency-call">
+                        <h3>응급 전화</h3>
+                        <a href="tel:119" class="emergency-number">119</a>
+                    </div>
+                    
+                    <div class="hospitals">
+                        <h3>주요 병원</h3>
+                        <div class="hospital-list">
+                            <div class="hospital-item">
+                                <span class="hospital-name">서울대학교병원</span>
+                                <a href="tel:02-2072-2114" class="hospital-phone">02-2072-2114</a>
+                            </div>
+                            <div class="hospital-item">
+                                <span class="hospital-name">삼성서울병원</span>
+                                <a href="tel:02-3410-2114" class="hospital-phone">02-3410-2114</a>
+                            </div>
+                            <div class="hospital-item">
+                                <span class="hospital-name">서울아산병원</span>
+                                <a href="tel:02-3010-3000" class="hospital-phone">02-3010-3000</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 DoX. 건강한 미래를 함께합니다.</p>
+            <div class="disclaimer">
+                <p><strong>면책조항:</strong> 이 애플리케이션은 의료 정보 제공 목적으로만 사용되며, 전문 의료진의 진료를 대체할 수 없습니다.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/script.js"></script>
+</body>
+</html>

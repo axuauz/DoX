@@ -1,31 +1,13 @@
-// server.js
+
 const { createServer } = require('http');
 const { parse } = require('url');
-const next = require('next');
 const path = require('path');
+const fs = require('fs');
 
-const dev = process.env.NODE_ENV !== 'production';
 const hostname = '0.0.0.0';
 const port = process.env.PORT || 5000;
 
-// Next.js 앱 루트 (app/ 디렉터리를 포함한 프로젝트 루트)
-const appDir = path.join(__dirname, 'creative-agency-portfolio');
-
-// ❗ next()에는 dir과 dev(그리고 필요한 conf)만 넘깁니다.
-// hostname/port는 여기서 넘기지 않습니다.
-const app = next({
-  dev,
-  dir: appDir,
-  conf: {
-    experimental: {
-      outputFileTracingRoot: __dirname,
-    },
-  },
-});
-
-const handle = app.getRequestHandler();
-
-// --- DoX 진단 API 목업 데이터 ---
+// DoX 진단 API 목업 데이터
 const symptomDatabase = {
   '두통': {
     diagnosis: '긴장성 두통',
@@ -73,6 +55,19 @@ const symptomDatabase = {
 
 const emergencyKeywords = ['가슴통증', '호흡곤란', '의식잃음', '심한복통', '고열', '경련'];
 
+// MIME 타입 매핑
+const mimeTypes = {
+  '.html': 'text/html',
+  '.css': 'text/css',
+  '.js': 'application/javascript',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/x-icon'
+};
+
 // CORS 헬퍼
 function setCors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -80,118 +75,141 @@ function setCors(res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 }
 
-(async () => {
+// 정적 파일 서빙 함수
+function serveStaticFile(filePath, res) {
+  const ext = path.extname(filePath);
+  const mimeType = mimeTypes[ext] || 'text/plain';
+  
+  fs.readFile(filePath, (err, data) => {
+    if (err) {
+      res.writeHead(404, { 'Content-Type': 'text/html' });
+      res.end('<h1>404 Not Found</h1>');
+      return;
+    }
+    
+    res.writeHead(200, { 'Content-Type': mimeType });
+    res.end(data);
+  });
+}
+
+createServer((req, res) => {
   try {
-    await app.prepare();
+    const parsedUrl = parse(req.url, true);
+    const { pathname } = parsedUrl;
 
-    createServer(async (req, res) => {
-      try {
-        const parsedUrl = parse(req.url, true);
-        const { pathname } = parsedUrl;
+    // Preflight
+    if (req.method === 'OPTIONS') {
+      setCors(res);
+      res.writeHead(200);
+      return res.end();
+    }
 
-        // Preflight
-        if (req.method === 'OPTIONS') {
-          setCors(res);
-          res.writeHead(200);
-          return res.end();
-        }
+    // API: /api/diagnose
+    if (pathname === '/api/diagnose') {
+      setCors(res);
 
-        // ----- 커스텀 API: /api/diagnose -----
-        if (pathname === '/api/diagnose') {
-          setCors(res);
+      if (req.method !== 'POST') {
+        res.writeHead(405, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Method Not Allowed' }));
+      }
 
-          if (req.method !== 'POST') {
-            res.writeHead(405, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ error: 'Method Not Allowed' }));
+      let body = '';
+      req.on('data', (chunk) => (body += chunk));
+      req.on('end', () => {
+        try {
+          const { symptoms = '', age = null, gender = null } = JSON.parse(body || '{}');
+
+          let diagnosis = null;
+          let matchedSymptom = null;
+          let isEmergency = false;
+
+          // 응급 키워드 매칭
+          for (const k of emergencyKeywords) {
+            if (String(symptoms).toLowerCase().includes(k)) {
+              isEmergency = true;
+              break;
+            }
           }
 
-          let body = '';
-          req.on('data', (chunk) => (body += chunk));
-          req.on('end', () => {
-            try {
-              const { symptoms = '', age = null, gender = null } = JSON.parse(body || '{}');
-
-              let diagnosis = null;
-              let matchedSymptom = null;
-              let isEmergency = false;
-
-              // 응급 키워드 매칭
-              for (const k of emergencyKeywords) {
-                if (String(symptoms).toLowerCase().includes(k)) {
-                  isEmergency = true;
-                  break;
-                }
-              }
-
-              // 증상 DB 매칭
-              for (const symptom of Object.keys(symptomDatabase)) {
-                if (String(symptoms).toLowerCase().includes(symptom)) {
-                  diagnosis = symptomDatabase[symptom];
-                  matchedSymptom = symptom;
-                  if (diagnosis.severity === 'high') isEmergency = true;
-                  break;
-                }
-              }
-
-              if (!diagnosis) {
-                diagnosis = {
-                  diagnosis: '증상 분석 필요',
-                  medication: ['일반 종합비타민'],
-                  advice: '정확한 진단을 위해 병원 방문을 권장합니다.',
-                  severity: 'unknown',
-                };
-                matchedSymptom = '기타 증상';
-              }
-
-              res.writeHead(200, { 'Content-Type': 'application/json' });
-              return res.end(
-                JSON.stringify({
-                  symptoms,
-                  age,
-                  gender,
-                  matchedSymptom,
-                  diagnosis,
-                  isEmergency,
-                  timestamp: new Date().toISOString(),
-                })
-              );
-            } catch (e) {
-              res.writeHead(400, { 'Content-Type': 'application/json' });
-              return res.end(JSON.stringify({ error: 'Invalid JSON format' }));
+          // 증상 DB 매칭
+          for (const symptom of Object.keys(symptomDatabase)) {
+            if (String(symptoms).toLowerCase().includes(symptom)) {
+              diagnosis = symptomDatabase[symptom];
+              matchedSymptom = symptom;
+              if (diagnosis.severity === 'high') isEmergency = true;
+              break;
             }
-          });
-          return; // 커스텀 라우팅 종료
-        }
+          }
 
-        // ----- 커스텀 API: /api/emergency -----
-        if (pathname === '/api/emergency') {
-          setCors(res);
+          if (!diagnosis) {
+            diagnosis = {
+              diagnosis: '증상 분석 필요',
+              medication: ['일반 종합비타민'],
+              advice: '정확한 진단을 위해 병원 방문을 권장합니다.',
+              severity: 'unknown',
+            };
+            matchedSymptom = '기타 증상';
+          }
+
           res.writeHead(200, { 'Content-Type': 'application/json' });
           return res.end(
             JSON.stringify({
-              emergency: '119',
-              hospitals: [
-                { name: '서울대학교병원', phone: '02-2072-2114' },
-                { name: '삼성서울병원', phone: '02-3410-2114' },
-                { name: '서울아산병원', phone: '02-3010-3000' },
-              ],
+              symptoms,
+              age,
+              gender,
+              matchedSymptom,
+              diagnosis,
+              isEmergency,
+              timestamp: new Date().toISOString(),
             })
           );
+        } catch (e) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({ error: 'Invalid JSON format' }));
         }
+      });
+      return;
+    }
 
-        // 나머지는 Next가 처리
-        return handle(req, res, parsedUrl);
-      } catch (err) {
-        console.error('Error occurred handling', req.url, err);
-        res.statusCode = 500;
-        res.end('Internal Server Error');
-      }
-    }).listen(port, hostname, () => {
-      console.log(`> DoX 건강 진단 서비스 http://${hostname}:${port}`);
-      console.log('> Creative Agency Portfolio Next.js app started.');
-    });
+    // API: /api/emergency
+    if (pathname === '/api/emergency') {
+      setCors(res);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(
+        JSON.stringify({
+          emergency: '119',
+          hospitals: [
+            { name: '서울대학교병원', phone: '02-2072-2114' },
+            { name: '삼성서울병원', phone: '02-3410-2114' },
+            { name: '서울아산병원', phone: '02-3010-3000' },
+          ],
+        })
+      );
+    }
+
+    // 정적 파일 서빙
+    let filePath;
+    if (pathname === '/') {
+      filePath = path.join(__dirname, 'public', 'index.html');
+    } else {
+      filePath = path.join(__dirname, 'public', pathname);
+    }
+
+    // 보안: 디렉터리 트래버설 방지
+    const publicDir = path.join(__dirname, 'public');
+    const resolvedPath = path.resolve(filePath);
+    if (!resolvedPath.startsWith(publicDir)) {
+      res.writeHead(403, { 'Content-Type': 'text/html' });
+      return res.end('<h1>403 Forbidden</h1>');
+    }
+
+    serveStaticFile(filePath, res);
+
   } catch (err) {
-    console.error('Failed to prepare Next app:', err);
-    process.exit(1);
+    console.error('Error occurred handling', req.url, err);
+    res.statusCode = 500;
+    res.end('Internal Server Error');
   }
-})();
+}).listen(port, hostname, () => {
+  console.log(`> DoX 건강 진단 서비스가 http://${hostname}:${port}에서 실행 중입니다.`);
+});
