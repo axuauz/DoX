@@ -187,7 +187,6 @@ createServer((req, res) => {
       );
     }
 
-    // 정적 파일 서빙
     let filePath;
     if (pathname === '/') {
       filePath = path.join(__dirname, 'public', 'index.html');
@@ -195,7 +194,6 @@ createServer((req, res) => {
       filePath = path.join(__dirname, 'public', pathname);
     }
 
-    // 보안: 디렉터리 트래버설 방지
     const publicDir = path.join(__dirname, 'public');
     const resolvedPath = path.resolve(filePath);
     if (!resolvedPath.startsWith(publicDir)) {
