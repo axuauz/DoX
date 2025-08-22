@@ -1,41 +1,74 @@
 
-<div class="container">
-    <div class="result-header">
-        <h2>진단 결과</h2>
-        <div class="patient-info">
-            <p><strong>연령:</strong> <%= age %></p>
-            <p><strong>성별:</strong> <%= gender %></p>
-            <p><strong>증상:</strong> <%= symptoms %></p>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DoX - 진단 결과</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">DoX</h1>
+            <p class="tagline">건강한 노후를 위한 스마트 진단</p>
         </div>
-    </div>
+    </header>
     
-    <div class="diagnosis-card">
-        <div class="diagnosis-title">
-            <h3>🩺 예상 진단</h3>
-            <p class="diagnosis-name"><%= diagnosis.diagnosis %></p>
+    <main>
+        <div class="container">
+            <div class="result-header">
+                <h2>진단 결과</h2>
+                <div class="patient-info">
+                    <div><strong>연령:</strong> <%= age %></div>
+                    <div><strong>성별:</strong> <%= gender %></div>
+                    <div><strong>증상:</strong> <%= symptoms %></div>
+                </div>
+            </div>
+            
+            <div class="diagnosis-card">
+                <div class="diagnosis-title">
+                    <h3>분석된 증상: <%= matchedSymptom %></h3>
+                </div>
+                
+                <div class="diagnosis-name">
+                    <%= diagnosis.diagnosis %>
+                </div>
+                
+                <div class="medication-section">
+                    <h4>권장 약물</h4>
+                    <ul class="medication-list">
+                        <% diagnosis.medication.forEach(med => { %>
+                            <li><%= med %></li>
+                        <% }) %>
+                    </ul>
+                </div>
+                
+                <div class="advice-section">
+                    <h4>건강 조언</h4>
+                    <div class="advice-text">
+                        <%= diagnosis.advice %>
+                    </div>
+                </div>
+                
+                <div class="warning-section">
+                    <p><strong>주의사항:</strong> 이 진단 결과는 참고용이며, 정확한 진단을 위해서는 반드시 병원을 방문하시기 바랍니다.</p>
+                </div>
+                
+                <div class="action-buttons">
+                    <a href="/" class="btn-secondary">다시 진단하기</a>
+                    <a href="/emergency" class="btn-emergency">응급상황 안내</a>
+                </div>
+            </div>
         </div>
-        
-        <div class="medication-section">
-            <h4>💊 권장 의약품</h4>
-            <ul class="medication-list">
-                <% diagnosis.medication.forEach(med => { %>
-                    <li><%= med %></li>
-                <% }); %>
-            </ul>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 DoX. 건강한 미래를 함께합니다.</p>
         </div>
-        
-        <div class="advice-section">
-            <h4>📝 생활 관리 조언</h4>
-            <p class="advice-text"><%= diagnosis.advice %></p>
-        </div>
-        
-        <div class="warning-section">
-            <p><strong>⚠️ 중요:</strong> 이 결과는 참고용이며, 정확한 진단과 처방을 위해 의사와 상담하시기 바랍니다.</p>
-        </div>
-        
-        <div class="action-buttons">
-            <a href="/" class="btn-secondary">다시 진단하기</a>
-            <button onclick="window.print()" class="btn-primary">결과 출력하기</button>
-        </div>
-    </div>
-</div>
+    </footer>
+    
+    <script src="/script.js"></script>
+</body>
+</html>
