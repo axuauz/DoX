@@ -1,10 +1,12 @@
 
-// DOM 요소들
+// DOM Elements
 const diagnosisForm = document.getElementById('diagnosisForm');
 const diagnosisResult = document.getElementById('diagnosisResult');
-const resultDetails = document.getElementById('resultDetails');
+const resultContent = document.getElementById('resultContent');
+const submitButton = diagnosisForm.querySelector('.submit-button');
+const loadingSpinner = submitButton.querySelector('.loading-spinner');
 
-// 스크롤 함수
+// Smooth scrolling for navigation
 function scrollToSection(sectionId) {
     const section = document.getElementById(sectionId);
     if (section) {
@@ -15,27 +17,67 @@ function scrollToSection(sectionId) {
     }
 }
 
-// 진단 폼 제출 처리
-diagnosisForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+// Active navigation link
+function updateActiveNavLink() {
+    const sections = ['home', 'diagnosis', 'emergency', 'about'];
+    const navLinks = document.querySelectorAll('.nav-link');
     
-    const submitButton = e.target.querySelector('.submit-button');
-    const originalText = submitButton.textContent;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const sectionId = entry.target.id;
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${sectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, { threshold: 0.5 });
+
+    sections.forEach(sectionId => {
+        const section = document.getElementById(sectionId);
+        if (section) observer.observe(section);
+    });
+}
+
+// Header scroll effect
+function handleHeaderScroll() {
+    const header = document.querySelector('.header');
     
-    // 로딩 상태
-    submitButton.innerHTML = '<span class="loading"></span> 진단 중...';
-    submitButton.disabled = true;
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 100) {
+            header.style.background = 'rgba(255, 255, 255, 0.98)';
+            header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+        } else {
+            header.style.background = 'rgba(255, 255, 255, 0.95)';
+            header.style.boxShadow = 'none';
+        }
+    });
+}
+
+// Diagnosis form handling
+async function handleDiagnosisSubmit(event) {
+    event.preventDefault();
     
-    // 폼 데이터 수집
     const formData = new FormData(diagnosisForm);
     const data = {
         symptoms: formData.get('symptoms'),
         age: formData.get('age'),
         gender: formData.get('gender')
     };
-    
+
+    // Validation
+    if (!data.symptoms.trim() || !data.age || !data.gender) {
+        alert('모든 필드를 입력해주세요.');
+        return;
+    }
+
+    // Show loading state
+    setLoadingState(true);
+
     try {
-        // API 호출
         const response = await fetch('/api/diagnose', {
             method: 'POST',
             headers: {
@@ -43,207 +85,262 @@ diagnosisForm.addEventListener('submit', async (e) => {
             },
             body: JSON.stringify(data)
         });
-        
-        if (!response.ok) {
-            throw new Error('네트워크 오류가 발생했습니다.');
-        }
-        
-        const result = await response.json();
-        
-        // 결과 표시
-        displayDiagnosisResult(result);
-        
-        // 결과 섹션으로 스크롤
-        diagnosisResult.scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'start'
-        });
-        
-    } catch (error) {
-        console.error('Error:', error);
-        resultDetails.innerHTML = `
-            <div class="error-message">
-                <p><strong>오류:</strong> 진단 중 문제가 발생했습니다. 다시 시도해주세요.</p>
-            </div>
-        `;
-        diagnosisResult.style.display = 'block';
-    } finally {
-        // 버튼 상태 복원
-        submitButton.textContent = originalText;
-        submitButton.disabled = false;
-    }
-});
 
-// 진단 결과 표시 함수
+        if (!response.ok) {
+            throw new Error('진단 요청에 실패했습니다.');
+        }
+
+        const result = await response.json();
+        displayDiagnosisResult(result);
+    } catch (error) {
+        console.error('Diagnosis error:', error);
+        alert('진단 중 오류가 발생했습니다. 다시 시도해주세요.');
+    } finally {
+        setLoadingState(false);
+    }
+}
+
+function setLoadingState(loading) {
+    if (loading) {
+        submitButton.disabled = true;
+        submitButton.querySelector('span').textContent = '진단 중...';
+        loadingSpinner.style.display = 'block';
+    } else {
+        submitButton.disabled = false;
+        submitButton.querySelector('span').textContent = '진단 받기';
+        loadingSpinner.style.display = 'none';
+    }
+}
+
 function displayDiagnosisResult(result) {
-    const { symptoms, age, gender, matchedSymptom, diagnosis, isEmergency } = result;
-    
-    // 응급상황인 경우 클래스 추가
-    diagnosisResult.className = `diagnosis-result ${isEmergency ? 'emergency' : ''}`;
-    
-    let resultHTML = '';
-    
-    // 응급상황 알림
-    if (isEmergency) {
-        resultHTML += `
+    let html = '';
+
+    // Emergency alert
+    if (result.isEmergency) {
+        html += `
             <div class="emergency-alert">
-                🚨 응급상황이 의심됩니다! 즉시 119에 신고하거나 병원을 방문하세요!
+                <h4>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    응급상황 의심
+                </h4>
+                <p>즉시 병원에 방문하거나 119에 신고하세요!</p>
             </div>
         `;
     }
-    
-    // 진단 정보
-    resultHTML += `
+
+    // Matched symptom
+    html += `
         <div class="result-item">
-            <strong>입력된 증상:</strong> ${symptoms}
-        </div>
-        <div class="result-item">
-            <strong>연령대/성별:</strong> ${age} / ${gender}
-        </div>
-        <div class="result-item">
-            <strong>매칭된 증상:</strong> ${matchedSymptom}
-        </div>
-        <div class="result-item">
-            <strong>진단명:</strong> ${diagnosis.diagnosis}
-        </div>
-        <div class="result-item">
-            <strong>추천 약물:</strong> ${diagnosis.medication.join(', ')}
-        </div>
-        <div class="result-item">
-            <strong>조언:</strong> ${diagnosis.advice}
+            <h4>감지된 증상</h4>
+            <p>${result.matchedSymptom || '기타 증상'}</p>
         </div>
     `;
-    
-    // 응급상황인 경우 추가 정보
-    if (isEmergency) {
-        resultHTML += `
+
+    // Diagnosis
+    html += `
+        <div class="result-item">
+            <h4>예상 진단</h4>
+            <p>${result.diagnosis.diagnosis}</p>
+        </div>
+    `;
+
+    // Medication
+    if (result.diagnosis.medication && result.diagnosis.medication.length > 0) {
+        html += `
             <div class="result-item">
-                <strong style="color: #dc3545;">⚠️ 주의사항:</strong>
-                <ul style="margin-top: 0.5rem; margin-left: 1rem;">
-                    <li>즉시 119에 전화하세요</li>
-                    <li>가까운 응급실로 이동하세요</li>
-                    <li>혼자 있지 마시고 누군가에게 도움을 요청하세요</li>
+                <h4>권장 의약품</h4>
+                <ul>
+                    ${result.diagnosis.medication.map(med => `<li>${med}</li>`).join('')}
                 </ul>
             </div>
         `;
     }
-    
-    resultDetails.innerHTML = resultHTML;
-    diagnosisResult.style.display = 'block';
+
+    // Advice
+    if (result.diagnosis.advice) {
+        html += `
+            <div class="result-item">
+                <h4>건강 조언</h4>
+                <p>${result.diagnosis.advice}</p>
+            </div>
+        `;
+    }
+
+    // Disclaimer
+    html += `
+        <div class="result-item">
+            <h4>⚠️ 주의사항</h4>
+            <p>이 진단은 참고용이며, 정확한 진단을 위해 전문의와 상담하시기 바랍니다.</p>
+        </div>
+    `;
+
+    resultContent.innerHTML = html;
+    diagnosisResult.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
 }
 
-// 네비게이션 스크롤 효과
-document.addEventListener('DOMContentLoaded', () => {
-    // 네비게이션 링크들에 클릭 이벤트 추가
-    const navLinks = document.querySelectorAll('.nav a');
+function closeResult() {
+    diagnosisResult.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    
+    // Reset form
+    diagnosisForm.reset();
+}
+
+// Animation on scroll
+function animateOnScroll() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+
+    // Animate sections
+    const sections = document.querySelectorAll('section:not(.hero)');
+    sections.forEach(section => {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(30px)';
+        section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(section);
+    });
+}
+
+// Handle navigation clicks
+function handleNavigation() {
+    const navLinks = document.querySelectorAll('.nav-link');
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            const href = link.getAttribute('href');
-            const sectionId = href.substring(1); // # 제거
-            scrollToSection(sectionId);
+            const targetId = link.getAttribute('href').substring(1);
+            scrollToSection(targetId);
         });
     });
-    
-    // 스크롤에 따른 헤더 스타일 변경
-    let lastScrollTop = 0;
-    const header = document.querySelector('.header');
-    
-    window.addEventListener('scroll', () => {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+}
+
+// Emergency contact analytics (optional)
+function trackEmergencyContact(type, number) {
+    console.log(`Emergency contact clicked: ${type} - ${number}`);
+    // Here you could send analytics data to your backend
+}
+
+// Add click tracking to emergency contacts
+function setupEmergencyTracking() {
+    const emergencyLinks = document.querySelectorAll('a[href^="tel:"]');
+    emergencyLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const number = link.getAttribute('href').replace('tel:', '');
+            const type = number === '119' ? 'emergency' : 'hospital';
+            trackEmergencyContact(type, number);
+        });
+    });
+}
+
+// Form validation enhancements
+function enhanceFormValidation() {
+    const symptomsTextarea = document.getElementById('symptoms');
+    const ageSelect = document.getElementById('age');
+    const genderSelect = document.getElementById('gender');
+
+    // Real-time validation feedback
+    function validateField(field, condition, message) {
+        const isValid = condition();
+        field.style.borderColor = isValid ? 'var(--border)' : '#ef4444';
         
-        if (scrollTop > lastScrollTop && scrollTop > 100) {
-            // 스크롤 다운
-            header.style.transform = 'translateY(-100%)';
-        } else {
-            // 스크롤 업
-            header.style.transform = 'translateY(0)';
+        // Remove existing error message
+        const existingError = field.parentNode.querySelector('.error-message');
+        if (existingError) {
+            existingError.remove();
         }
-        
-        lastScrollTop = scrollTop;
+
+        // Add error message if invalid
+        if (!isValid) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.style.color = '#ef4444';
+            errorDiv.style.fontSize = '0.875rem';
+            errorDiv.style.marginTop = '0.5rem';
+            errorDiv.textContent = message;
+            field.parentNode.appendChild(errorDiv);
+        }
+
+        return isValid;
+    }
+
+    symptomsTextarea.addEventListener('blur', () => {
+        validateField(symptomsTextarea, 
+            () => symptomsTextarea.value.trim().length >= 5,
+            '증상을 5글자 이상 입력해주세요.'
+        );
     });
-    
-    // 부드러운 스크롤 설정
-    document.documentElement.style.scrollBehavior = 'smooth';
-});
 
-// 폼 유효성 검사
-function validateForm() {
-    const symptoms = document.getElementById('symptoms').value.trim();
-    const age = document.getElementById('age').value;
-    const gender = document.getElementById('gender').value;
-    
-    if (!symptoms) {
-        alert('증상을 입력해주세요.');
-        return false;
-    }
-    
-    if (!age) {
-        alert('연령대를 선택해주세요.');
-        return false;
-    }
-    
-    if (!gender) {
-        alert('성별을 선택해주세요.');
-        return false;
-    }
-    
-    return true;
+    ageSelect.addEventListener('change', () => {
+        validateField(ageSelect,
+            () => ageSelect.value !== '',
+            '연령대를 선택해주세요.'
+        );
+    });
+
+    genderSelect.addEventListener('change', () => {
+        validateField(genderSelect,
+            () => genderSelect.value !== '',
+            '성별을 선택해주세요.'
+        );
+    });
 }
 
-// 진단 폼에 유효성 검사 추가
-diagnosisForm.addEventListener('submit', (e) => {
-    if (!validateForm()) {
-        e.preventDefault();
-        return false;
-    }
-});
-
-// 입력 필드 실시간 유효성 검사
-document.getElementById('symptoms').addEventListener('input', (e) => {
-    const value = e.target.value.trim();
-    if (value.length > 500) {
-        e.target.style.borderColor = '#dc3545';
-        // 경고 메시지 표시 (선택사항)
-    } else {
-        e.target.style.borderColor = '#e9ecef';
-    }
-});
-
-// 접근성 개선: 키보드 네비게이션
-document.addEventListener('keydown', (e) => {
-    // ESC 키로 결과 숨기기
-    if (e.key === 'Escape' && diagnosisResult.style.display === 'block') {
-        diagnosisResult.style.display = 'none';
-    }
-    
-    // Enter 키로 진단 시작 버튼 클릭
-    if (e.key === 'Enter' && e.target.classList.contains('cta-button')) {
-        e.target.click();
-    }
-});
-
-// 터치 디바이스 최적화
-if ('ontouchstart' in window) {
-    // 터치 디바이스용 호버 효과 제거
-    document.body.classList.add('touch-device');
-}
-
-// 성능 최적화: 이미지 레이지 로딩 (필요시)
-if ('IntersectionObserver' in window) {
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.classList.remove('lazy');
-                imageObserver.unobserve(img);
+// Keyboard shortcuts
+function setupKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
+        // Escape key to close result modal
+        if (e.key === 'Escape') {
+            if (diagnosisResult.style.display === 'flex') {
+                closeResult();
             }
-        });
-    });
-    
-    // 레이지 로딩 이미지가 있다면 적용
-    document.querySelectorAll('img[data-src]').forEach(img => {
-        imageObserver.observe(img);
+        }
+
+        // Enter key to submit form when focused on form elements
+        if (e.key === 'Enter' && e.target.closest('.diagnosis-form')) {
+            if (e.target.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                handleDiagnosisSubmit(e);
+            }
+        }
     });
 }
+
+// Initialize all functionality
+document.addEventListener('DOMContentLoaded', () => {
+    // Core functionality
+    handleHeaderScroll();
+    updateActiveNavLink();
+    handleNavigation();
+    
+    // Form handling
+    diagnosisForm.addEventListener('submit', handleDiagnosisSubmit);
+    enhanceFormValidation();
+    
+    // UI enhancements
+    animateOnScroll();
+    setupEmergencyTracking();
+    setupKeyboardShortcuts();
+    
+    // Close modal when clicking outside
+    diagnosisResult.addEventListener('click', (e) => {
+        if (e.target === diagnosisResult) {
+            closeResult();
+        }
+    });
+
+    console.log('DoX 건강 진단 서비스가 초기화되었습니다.');
+});
+
+// Export functions for global use
+window.scrollToSection = scrollToSection;
+window.closeResult = closeResult;

@@ -5,154 +5,266 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DoX - 노인 건강 진단</title>
-    <meta name="description" content="건강한 노후를 위한 스마트 진단 서비스">
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Header -->
     <header class="header">
         <div class="container">
-            <h1 class="logo">DoX</h1>
-            <nav class="nav">
-                <a href="#home">홈</a>
-                <a href="#diagnosis">진단</a>
-                <a href="#about">소개</a>
-                <a href="#emergency">응급상황</a>
-            </nav>
+            <div class="header-content">
+                <div class="logo">
+                    <svg class="heart-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    <span class="logo-text">DoX</span>
+                </div>
+                
+                <nav class="nav">
+                    <a href="#home" class="nav-link active">홈</a>
+                    <a href="#diagnosis" class="nav-link">진단</a>
+                    <a href="#emergency" class="nav-link">응급상황</a>
+                    <a href="#about" class="nav-link">소개</a>
+                </nav>
+
+                <div class="emergency-contact">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                    <span>119</span>
+                </div>
+            </div>
         </div>
     </header>
 
-    <main>
-        <!-- Hero Section -->
-        <section id="home" class="hero">
-            <div class="container">
-                <div class="hero-content">
-                    <h2 class="hero-title">건강한 노후를 위한<br>스마트 진단 서비스</h2>
-                    <p class="hero-subtitle">AI 기반 자동 진단으로 맞춤형 건강 조언을 받아보세요</p>
-                    <button class="cta-button" onclick="scrollToSection('diagnosis')">진단 시작하기</button>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        <span class="highlight">건강한 노후</span>를 위한<br>
+                        스마트 진단 서비스
+                    </h1>
+                    <p class="hero-description">
+                        간단한 질문으로 맞춤형 건강 조언을 받아보세요.<br>
+                        언제나 여러분의 건강을 생각합니다.
+                    </p>
+                    <button class="cta-button" onclick="scrollToSection('diagnosis')">
+                        진단 시작하기
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
                 </div>
-                <div class="hero-image">
-                    <div class="health-icon">🏥</div>
+
+                <div class="hero-features">
+                    <div class="feature-item">
+                        <div class="feature-icon feature-icon-heart">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </div>
+                        <span class="feature-text">맞춤 진단</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon feature-icon-shield">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                        </div>
+                        <span class="feature-text">안전한 서비스</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon feature-icon-clock">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12,6 12,12 16,14"/>
+                            </svg>
+                        </div>
+                        <span class="feature-text">24시간 이용</span>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Diagnosis Form Section -->
-        <section id="diagnosis" class="diagnosis-section">
-            <div class="container">
-                <h2 class="section-title">건강 진단</h2>
-                <div class="diagnosis-form">
-                    <form id="diagnosisForm">
+    <!-- Diagnosis Form Section -->
+    <section id="diagnosis" class="diagnosis">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">건강 진단 시작하기</h2>
+                <p class="section-description">몇 가지 간단한 질문으로 맞춤형 건강 조언을 받아보세요</p>
+            </div>
+
+            <div class="diagnosis-form-container">
+                <form id="diagnosisForm" class="diagnosis-form">
+                    <div class="form-group">
+                        <label for="symptoms" class="form-label">어떤 증상이 있으신가요?</label>
+                        <textarea 
+                            id="symptoms" 
+                            name="symptoms" 
+                            placeholder="예: 두통이 심해요, 기침이 계속 나요..."
+                            class="form-textarea"
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="form-row">
                         <div class="form-group">
-                            <label for="symptoms">증상을 입력해주세요</label>
-                            <textarea id="symptoms" name="symptoms" placeholder="예: 두통이 있어요" required></textarea>
+                            <label for="age" class="form-label">연령대</label>
+                            <select id="age" name="age" class="form-select" required>
+                                <option value="">선택해주세요</option>
+                                <option value="50-55">50-55세</option>
+                                <option value="56-60">56-60세</option>
+                                <option value="61-65">61-65세</option>
+                                <option value="66-70">66-70세</option>
+                                <option value="71-75">71-75세</option>
+                                <option value="76+">76세 이상</option>
+                            </select>
                         </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="age">연령대</label>
-                                <select id="age" name="age" required>
-                                    <option value="">선택하세요</option>
-                                    <option value="60-65">60-65세</option>
-                                    <option value="66-70">66-70세</option>
-                                    <option value="71-75">71-75세</option>
-                                    <option value="76-80">76-80세</option>
-                                    <option value="81+">81세 이상</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="gender">성별</label>
-                                <select id="gender" name="gender" required>
-                                    <option value="">선택하세요</option>
-                                    <option value="남성">남성</option>
-                                    <option value="여성">여성</option>
-                                </select>
-                            </div>
+
+                        <div class="form-group">
+                            <label for="gender" class="form-label">성별</label>
+                            <select id="gender" name="gender" class="form-select" required>
+                                <option value="">선택해주세요</option>
+                                <option value="남성">남성</option>
+                                <option value="여성">여성</option>
+                            </select>
                         </div>
-                        
-                        <button type="submit" class="submit-button">진단 받기</button>
-                    </form>
-                    
-                    <div id="diagnosisResult" class="diagnosis-result" style="display: none;">
-                        <div class="result-content">
+                    </div>
+
+                    <button type="submit" class="submit-button">
+                        <span>진단 받기</span>
+                        <div class="loading-spinner"></div>
+                    </button>
+                </form>
+
+                <!-- Results -->
+                <div id="diagnosisResult" class="diagnosis-result">
+                    <div class="result-content">
+                        <div class="result-header">
                             <h3>진단 결과</h3>
-                            <div id="resultDetails"></div>
+                            <button class="close-result" onclick="closeResult()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
                         </div>
+                        <div id="resultContent"></div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- About Section -->
-        <section id="about" class="about-section">
-            <div class="container">
-                <h2 class="section-title">DoX 소개</h2>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">🤖</div>
-                        <h3>AI 자동 진단</h3>
-                        <p>증상 기반 건강 상태 분석</p>
+    <!-- Emergency Section -->
+    <section id="emergency" class="emergency">
+        <div class="container">
+            <div class="emergency-content">
+                <div class="emergency-header">
+                    <div class="emergency-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">💊</div>
-                        <h3>맞춤형 약물 추천</h3>
-                        <p>개인별 맞춤 의약품 안내</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">🚨</div>
-                        <h3>응급상황 대응</h3>
-                        <p>응급시 즉시 연락 가능한 번호 제공</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">👥</div>
-                        <h3>노인 친화적 UI</h3>
-                        <p>큰 글씨와 간단한 인터페이스</p>
-                    </div>
+                    <h2>응급상황 시</h2>
+                    <p>즉시 연락하세요</p>
                 </div>
-            </div>
-        </section>
 
-        <!-- Emergency Section -->
-        <section id="emergency" class="emergency-section">
-            <div class="container">
-                <h2 class="section-title">응급상황</h2>
-                <div class="emergency-content">
-                    <div class="emergency-call">
-                        <h3>응급 전화</h3>
-                        <a href="tel:119" class="emergency-number">119</a>
+                <div class="emergency-contacts">
+                    <div class="emergency-card emergency-119">
+                        <div class="emergency-number">119</div>
+                        <div class="emergency-label">응급실</div>
+                        <a href="tel:119" class="emergency-call-btn">즉시 통화</a>
                     </div>
-                    
-                    <div class="hospitals">
+
+                    <div class="hospital-list">
                         <h3>주요 병원</h3>
-                        <div class="hospital-list">
-                            <div class="hospital-item">
-                                <span class="hospital-name">서울대학교병원</span>
-                                <a href="tel:02-2072-2114" class="hospital-phone">02-2072-2114</a>
-                            </div>
-                            <div class="hospital-item">
-                                <span class="hospital-name">삼성서울병원</span>
-                                <a href="tel:02-3410-2114" class="hospital-phone">02-3410-2114</a>
-                            </div>
-                            <div class="hospital-item">
-                                <span class="hospital-name">서울아산병원</span>
-                                <a href="tel:02-3010-3000" class="hospital-phone">02-3010-3000</a>
-                            </div>
+                        <div class="hospital-item">
+                            <span class="hospital-name">서울대학교병원</span>
+                            <a href="tel:02-2072-2114" class="hospital-phone">02-2072-2114</a>
+                        </div>
+                        <div class="hospital-item">
+                            <span class="hospital-name">삼성서울병원</span>
+                            <a href="tel:02-3410-2114" class="hospital-phone">02-3410-2114</a>
+                        </div>
+                        <div class="hospital-item">
+                            <span class="hospital-name">서울아산병원</span>
+                            <a href="tel:02-3010-3000" class="hospital-phone">02-3010-3000</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>DoX에 대하여</h2>
+                    <p>DoX는 노인분들의 건강한 삶을 위해 설계된 AI 기반 건강 진단 서비스입니다. 간단한 증상 입력만으로 맞춤형 건강 조언과 약물 추천을 제공합니다.</p>
+                    
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <h4>🏥 AI 자동 진단</h4>
+                            <p>증상 기반 건강 상태 분석</p>
+                        </div>
+                        <div class="about-feature">
+                            <h4>💊 맞춤형 약물 추천</h4>
+                            <p>개인별 맞춤 의약품 안내</p>
+                        </div>
+                        <div class="about-feature">
+                            <h4>🚨 응급상황 대응</h4>
+                            <p>응급시 즉시 연락 가능한 번호 제공</p>
+                        </div>
+                        <div class="about-feature">
+                            <h4>👥 노인 친화적 UI</h4>
+                            <p>큰 글씨와 간단한 인터페이스</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="about-disclaimer">
+                    <div class="disclaimer-content">
+                        <h4>⚠️ 면책조항</h4>
+                        <p>이 애플리케이션은 의료 정보 제공 목적으로만 사용되며, 전문 의료진의 진료를 대체할 수 없습니다. 심각한 증상이 있을 경우 반드시 병원을 방문하시기 바랍니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 DoX. 건강한 미래를 함께합니다.</p>
-            <div class="disclaimer">
-                <p><strong>면책조항:</strong> 이 애플리케이션은 의료 정보 제공 목적으로만 사용되며, 전문 의료진의 진료를 대체할 수 없습니다.</p>
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <svg class="heart-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    <span>DoX</span>
+                </div>
+                <p class="footer-text">건강한 미래를 함께합니다.</p>
+                <div class="footer-links">
+                    <a href="#home">홈</a>
+                    <a href="#diagnosis">진단</a>
+                    <a href="#emergency">응급상황</a>
+                    <a href="#about">소개</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 DoX. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <script src="/script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
