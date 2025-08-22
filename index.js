@@ -1,8 +1,8 @@
 
-const { createServer } = require('http');
-const { parse } = require('url');
-const next = require('next');
-const path = require('path');
+import { createServer } from 'http';
+import { parse } from 'url';
+import next from 'next';
+import path from 'path';
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = '0.0.0.0';
@@ -180,7 +180,6 @@ app.prepare().then(() => {
     }
   }).listen(port, hostname, (err) => {
     if (err) throw err;
-    console.log(`> DoX 건강 진단 서비스가 http://${hostname}:${port}에서 실행 중입니다.`);
-    console.log(`> Creative Agency Portfolio가 Next.js로 실행됩니다.`);
+    console.log("DoX")
   });
 });
