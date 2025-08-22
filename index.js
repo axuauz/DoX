@@ -1,23 +1,17 @@
 
-const express = require('express');
-const { createProxyMiddleware } = require('http-proxy-middleware');
-const path = require('path');
-const app = express();
+const { createServer } = require('http');
+const { parse } = require('url');
+const next = require('next');
 
-// Next.js 개발 서버 프록시 설정
-const nextProxy = createProxyMiddleware({
-  target: 'http://localhost:3000',
-  changeOrigin: true,
-  ws: true,
-});
+const dev = process.env.NODE_ENV !== 'production';
+const hostname = '0.0.0.0';
+const port = process.env.PORT || 5000;
 
-// Next.js 앱으로 프록시
-app.use('/', nextProxy);
+// Next.js 앱 설정
+const app = next({ dev, hostname, port, dir: './creative-agency-portfolio' });
+const handle = app.getRequestHandler();
 
-// 진단 API 엔드포인트
-app.use(express.json());
-
-// 증상 데이터베이스
+// 진단 API 데이터
 const symptomDatabase = {
   '두통': {
     diagnosis: '긴장성 두통',
@@ -46,40 +40,63 @@ const symptomDatabase = {
   }
 };
 
-// API 라우트
-app.post('/api/diagnose', (req, res) => {
-  const { symptoms, age, gender } = req.body;
-  
-  let diagnosis = null;
-  let matchedSymptom = null;
-  
-  for (const symptom in symptomDatabase) {
-    if (symptoms.toLowerCase().includes(symptom)) {
-      diagnosis = symptomDatabase[symptom];
-      matchedSymptom = symptom;
-      break;
-    }
-  }
-  
-  if (!diagnosis) {
-    diagnosis = {
-      diagnosis: '증상 분석 필요',
-      medication: ['일반 종합비타민'],
-      advice: '정확한 진단을 위해 병원 방문을 권장합니다.'
-    };
-    matchedSymptom = '기타 증상';
-  }
-  
-  res.json({
-    symptoms,
-    age,
-    gender,
-    matchedSymptom,
-    diagnosis
-  });
-});
+app.prepare().then(() => {
+  createServer(async (req, res) => {
+    try {
+      const parsedUrl = parse(req.url, true);
+      const { pathname, query } = parsedUrl;
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`DoX 서버가 포트 ${PORT}에서 실행 중입니다.`);
+      // API 라우트 처리
+      if (pathname === '/api/diagnose') {
+        if (req.method === 'POST') {
+          let body = '';
+          req.on('data', chunk => {
+            body += chunk.toString();
+          });
+          req.on('end', () => {
+            const { symptoms, age, gender } = JSON.parse(body);
+            
+            let diagnosis = null;
+            let matchedSymptom = null;
+            
+            for (const symptom in symptomDatabase) {
+              if (symptoms.toLowerCase().includes(symptom)) {
+                diagnosis = symptomDatabase[symptom];
+                matchedSymptom = symptom;
+                break;
+              }
+            }
+            
+            if (!diagnosis) {
+              diagnosis = {
+                diagnosis: '증상 분석 필요',
+                medication: ['일반 종합비타민'],
+                advice: '정확한 진단을 위해 병원 방문을 권장합니다.'
+              };
+              matchedSymptom = '기타 증상';
+            }
+            
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({
+              symptoms,
+              age,
+              gender,
+              matchedSymptom,
+              diagnosis
+            }));
+          });
+        }
+      } else {
+        // Next.js 핸들러로 전달
+        await handle(req, res, parsedUrl);
+      }
+    } catch (err) {
+      console.error('Error occurred handling', req.url, err);
+      res.statusCode = 500;
+      res.end('internal server error');
+    }
+  }).listen(port, hostname, (err) => {
+    if (err) throw err;
+    console.log(`> DoX 서버가 http://${hostname}:${port}에서 실행 중입니다.`);
+  });
 });
