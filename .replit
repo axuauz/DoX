@@ -7,7 +7,7 @@ channel = "stable-25_05"
 run = ["sh", "-c", "node index.js"]
 
 [workflows]
-runButton = "DoX Server"
+runButton = "Project"
 
 [[workflows.workflow]]
 name = "DoX Server"
@@ -27,6 +27,30 @@ mode = "sequential"
 task = "shell.exec"
 args = "cd creative-agency-portfolio && npm run dev"
 
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Dox App"
+
+[[workflows.workflow]]
+name = "Dox App"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node index.js"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[agent]
+expertMode = true
