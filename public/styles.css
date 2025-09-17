@@ -784,3 +784,338 @@ body {
         font-size: 3rem;
     }
 }
+
+/* ===== POSTURE ANALYSIS STYLES ===== */
+
+.posture-analysis {
+    padding: 6rem 0;
+    background: var(--surface);
+    position: relative;
+}
+
+.posture-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.posture-controls {
+    padding: 2rem;
+    background: var(--gradient-light);
+    border-bottom: 1px solid var(--border);
+}
+
+.age-gender-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.posture-analysis-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 2rem;
+    min-height: 400px;
+}
+
+.camera-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.camera-container {
+    position: relative;
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    background: var(--surface);
+    text-align: center;
+    min-height: 320px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#postureCanvas {
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.posture-status {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.posture-results {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.posture-predictions {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+}
+
+.posture-predictions h4 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+#postureLabels {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.prediction-label {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border);
+}
+
+.posture-advice {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.posture-advice h4 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.detected-posture {
+    background: var(--gradient-light);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.posture-name {
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.confidence {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+.quick-advice {
+    background: #fef7cd;
+    border: 1px solid #fbbf24;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.quick-advice ul {
+    margin: 0.5rem 0 0 1rem;
+}
+
+.quick-advice li {
+    margin-bottom: 0.25rem;
+}
+
+.good-posture {
+    background: #d1fae5;
+    border: 1px solid #10b981;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    color: #065f46;
+    font-weight: 600;
+    margin: 1rem 0;
+}
+
+.analysis-button {
+    background: var(--gradient);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.analysis-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.detailed-analysis {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    margin-top: 1rem;
+}
+
+.analysis-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.analysis-header h4 {
+    color: var(--primary);
+    font-size: 1.3rem;
+}
+
+.timestamp {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.posture-diagnosis {
+    background: var(--gradient-light);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.posture-diagnosis h5 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.severity-good {
+    color: #065f46;
+    background: #d1fae5;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.severity-warning {
+    color: #92400e;
+    background: #fef3c7;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.severity-caution {
+    color: #991b1b;
+    background: #fee2e2;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.health-advice, .exercise-recommendations, .related-symptoms {
+    margin-bottom: 1.5rem;
+}
+
+.health-advice h5, .exercise-recommendations h5, .related-symptoms h5 {
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+}
+
+.exercise-recommendations ul {
+    margin-left: 1rem;
+}
+
+.exercise-recommendations li {
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+}
+
+.symptom-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.symptom-tag {
+    background: var(--primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.symptom-tag:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.disclaimer {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 1rem;
+    border-left: 4px solid #f59e0b;
+}
+
+/* Mobile responsiveness for posture analysis */
+@media (max-width: 768px) {
+    .posture-analysis-content {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .age-gender-inputs {
+        grid-template-columns: 1fr;
+    }
+    
+    .camera-container {
+        min-height: 280px;
+    }
+    
+    #postureCanvas {
+        max-width: 100%;
+    }
+    
+    .analysis-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .symptom-tags {
+        justify-content: center;
+    }
+}
