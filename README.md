@@ -1,23 +1,7 @@
 
 # DoX - 노인 건강 진단 서비스
 
-DoX는 노인을 위한 AI 기반 자동 진단 웹 애플리케이션입니다. 사용자 친화적인 인터페이스를 통해 증상을 입력하면 맞춤형 건강 조언과 약물 추천을 제공합니다.
-
-## 주요 기능
-
-- 🏥 **AI 자동 진단**: 증상 기반 건강 상태 분석
-- 💊 **맞춤형 약물 추천**: 개인별 맞춤 의약품 안내
-- 🚨 **응급상황 대응**: 응급시 즉시 연락 가능한 번호 제공
-- 👥 **노인 친화적 UI**: 큰 글씨와 간단한 인터페이스
-- 📱 **반응형 디자인**: 모든 기기에서 접근 가능
-
-## 기술 스택
-
-- **Frontend**: Next.js 14, React, TypeScript
-- **Styling**: Tailwind CSS, Framer Motion
-- **Backend**: Node.js, Express API
-- **UI Components**: Radix UI, Lucide React
-
+DoX는 노인을 위한 AI 기반 자동 진단 웹 애플리케이션입니다. 
 ## 실행 방법
 
 ### 개발 환경
@@ -90,25 +74,8 @@ NODE_ENV=production npm start
 ```
 
 ## 지원 증상
-
 - 두통
 - 기침
 - 복통
 - 무릎통증
 - 불면증
-
-## 주의사항
-
-⚠️ **면책조항**: 이 애플리케이션은 의료 정보 제공 목적으로만 사용되며, 전문 의료진의 진료를 대체할 수 없습니다. 심각한 증상이 있을 경우 반드시 병원을 방문하시기 바랍니다.
-
-## 기여하기
-
-1. Fork this repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
-
----
-
-© 2025 DoX. 건강한 미래를 함께합니다.
